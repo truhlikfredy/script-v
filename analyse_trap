@@ -1,0 +1,33 @@
+define analyse_trap
+  printf "For more details use: https://content.riscv.org/wp-content/uploads/2017/05/riscv-privileged-v1.10.pdf \n\n"
+
+ 
+  printf "\nInterrupt pending:\n"
+  monitor reg mip
+  
+  printf "\nInterrupt enable:\n"
+  monitor reg mie
+  
+  printf "\n[mtval] contains address, opcode or have no meaning (meaning depends on mcause):\n"
+  if ($mcause == 0x0 | $mcause & 0x1 | $mcause & 0x4 | $mcause & 0x5 | $mcause & 0x6 | $mcause & 0x7 | $mcause & 0xC | $mcause & 0xe)
+    disassemble /s $mtval,+24
+  else
+    x/i $mtval
+  end
+  
+  printf "\n[mtvec]trap vector (where to jump in case trap happens):\n"
+  x/i $mtvec
+  disassemble /s $mtvec,+24
+  
+  printf "\nPC where the exception happened:\n"
+  x/i $mepc
+  disassemble /s $mepc,+24
+  
+  printf "\nTemporary, sometimes might hold value of a0:\n"
+  monitor reg mscratch
+  
+  analyse_csr_mstatus
+end
+document analyse_trap
+Print CSRs related to trap
+end
