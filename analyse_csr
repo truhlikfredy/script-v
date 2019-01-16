@@ -11,7 +11,7 @@ define analyse_csr_mcause
     printf "1 Instruction access fault (mtval is the address)"
   end
   if (($mcause & 0x7FFFFFFF) == 2)
-    printf "2 Illegal instruction (mtval contains the offending instruction opcode)"
+    printf "2 Illegal instruction (mtval is the opcode)"
   end
   if (($mcause & 0x7FFFFFFF) == 3)
     printf "3 Breakpoint"
@@ -35,19 +35,22 @@ define analyse_csr_mcause
     printf "9 Environment call from S-mode"
   end
   if (($mcause & 0x7FFFFFFF) == 0xA)
-    printf "A Environment call from M-mode"
+    printf "A Reserved"
   end
   if (($mcause & 0x7FFFFFFF) == 0xB)
-    printf "B Instruction page fault"
+    printf "B Environment call from M-mode"
   end
   if (($mcause & 0x7FFFFFFF) == 0xC)
-    printf "C Load page fault (mtval is the address)"
+    printf "C Instruction page fault"
   end
   if (($mcause & 0x7FFFFFFF) == 0xD)
-    printf "D Reserved"
+    printf "D Load page fault (mtval is the address)"
   end
   if (($mcause & 0x7FFFFFFF) == 0xE)
-    printf "E Store page fault (mtval is the address)\n"
+    printf "E Reserved"
+  end
+  if (($mcause & 0x7FFFFFFF) == 0xF)
+    printf "F Store page fault (mtval is the address)\n"
   end
   printf "\n"
 end
